@@ -98,7 +98,7 @@
         </div>
         </form>
 
-      <a href="#" class="text-center">Already have an account!</a>
+      <a href="logShopOwner.php" class="text-center">Already have an account!</a>
     </div>
     <!-- /.form-box -->
   </div><!-- /.card -->
