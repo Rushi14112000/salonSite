@@ -1,3 +1,34 @@
+<?php
+
+include 'config.php';
+
+  if(isset($_POST['submit'])){
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $mobile = $_POST['mobile'];
+    $password = $_POST['password'];
+    $city = $_POST['city'];
+  
+  $sql = "SELECT * FROM regshopowner WHERE mobile = '$mobile'";
+  $result = mysqli_query($conn,$sql);
+
+  if($result){
+    if(mysqli_num_rows($result) == 0){
+      $sql = "INSERT INTO regshopowner (name,email,mobile,password,city) VALUES ('$name', '$email', '$mobile', '$password', '$city')";
+      $result = mysqli_query($conn,$sql);
+    }
+    else{
+      echo "account already exist";
+    }
+  }
+  else{
+    echo "Error :". mysqli_error($conn);
+  }
+
+  }
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,7 +63,7 @@
   <div class="card" >
     <div class="card-body register-card-body" style="background-color: #1f2833;">
 
-    <form action="#" method="post">
+    <form action="regShopOwner.php" method="post">
 
         <div class="input-group mb-3">
           <input type="text" class="form-control" name="name" placeholder="Full name" pattern="[A-Za-z\s]+" required style="background-color: #e3f2fd;">
@@ -96,7 +127,7 @@
           </div>
           <!-- /.col -->
         </div>
-        </form>
+      </form>
 
       <a href="logShopOwner.php" class="text-center">Already have an account!</a>
     </div>
