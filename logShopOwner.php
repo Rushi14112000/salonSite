@@ -19,7 +19,7 @@ if(isset($_SESSION['mob'])){
       header("Location: homePage.php");
     } 
     else{
-      echo "<script> alert('woops! wrong Credentials')</sccript>";
+      echo "<script> alert('woops! wrong Credentials or Not registered')</sccript>";
     }
     
   }
