@@ -16,6 +16,8 @@ include 'config.php';
     if(mysqli_num_rows($result) == 0){
       $sql = "INSERT INTO regshopowner (name,email,mobile,password,city) VALUES ('$name', '$email', '$mobile', '$password', '$city')";
       $result = mysqli_query($conn,$sql);
+      
+      echo "account created successfully";
     }
     else{
       echo "account already exist";

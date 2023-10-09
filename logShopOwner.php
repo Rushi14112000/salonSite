@@ -1,3 +1,19 @@
+<?php
+include 'config.php';
+
+session_start();
+
+if(isset($_SESSION['mobile'])){
+  header("Location:yetToDefine");
+}
+
+  if(isset($_POST['submit'])){
+    $mobile = $_POST['mobile'];
+    $password = $_POST['password'];
+    
+  }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
