@@ -3,13 +3,24 @@ include 'config.php';
 
 session_start();
 
-if(isset($_SESSION['mobile'])){
-  header("Location:yetToDefine");
+if(isset($_SESSION['mob'])){
+  header("Location:homePage.php");
 }
 
   if(isset($_POST['submit'])){
     $mobile = $_POST['mobile'];
     $password = $_POST['password'];
+
+    $sql = "SELECT * FROM regShopOwner WHERE mobile='$mobile' AND password='$password'";
+    $result = mysqli_query($conn,$sql);
+    if(mysqli_num_rows($result) > 0){
+      $row = mysqli_fetch_assoc($result);
+      $_SESSION['mob'] = $row['mobile'];
+      header("Location: homePage.php");
+    } 
+    else{
+      echo "<script> alert('woops! wrong Credentials')</sccript>";
+    }
     
   }
 ?>
