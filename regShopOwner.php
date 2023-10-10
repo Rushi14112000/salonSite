@@ -7,14 +7,13 @@ include 'config.php';
     $email = $_POST['email'];
     $mobile = $_POST['mobile'];
     $password = $_POST['password'];
-    $city = $_POST['city'];
   
   $sql = "SELECT * FROM regshopowner WHERE mobile = '$mobile'";
   $result = mysqli_query($conn,$sql);
 
   if($result){
     if(mysqli_num_rows($result) == 0){
-      $sql = "INSERT INTO regshopowner (name,email,mobile,password,city) VALUES ('$name', '$email', '$mobile', '$password', '$city')";
+      $sql = "INSERT INTO regshopowner (name,email,mobile,password) VALUES ('$name', '$email', '$mobile', '$password')";
       $result = mysqli_query($conn,$sql);
       
       echo "account created successfully";
@@ -110,15 +109,6 @@ include 'config.php';
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-eye" id="togglePassword1"></span>
-            </div>
-          </div>
-        </div>
-
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="city" placeholder="City" required style="background-color: #e3f2fd;">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-city"></span>
             </div>
           </div>
         </div>
