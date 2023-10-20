@@ -2,6 +2,11 @@
 
 include 'config.php';
 
+session_start();
+if(isset($_SESSION['mob'])){
+  header("Location:homePage.php");
+}
+
   if(isset($_POST['submit'])){
     $name = $_POST['name'];
     $email = $_POST['email'];
