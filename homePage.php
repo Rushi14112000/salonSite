@@ -8,43 +8,75 @@ if (!isset($_SESSION['mob'])) {
 $mobile = $_SESSION['mob'];
 $message = "";
 
-// Check if a file was uploaded
-if (isset($_FILES["image"])) {
+if (isset($_POST["saveChanges"])) {
+    // Update shop details
+    $shopName = ($_POST['shopName']);
+    $city = ($_POST['city']);
+
+    $sql = "UPDATE regShopOwner SET";
+
+    if (!empty($shopName) && !empty($city)) {
+        $sql .= " shopName = '$shopName', city = '$city'";
+        $message = "Shop details updated";
+    } elseif (!empty($shopName)) {
+        $sql .= " shopName = '$shopName'";
+        $message = "Shop name updated";
+    } elseif (!empty($city)) {
+        $sql .= " city = '$city'";
+        $message = "City updated";
+    } else {
+        $message = "No data sent for update";
+    }
+
+    $sql .= " WHERE mobile = '$mobile'";
+
+    if (mysqli_query($conn, $sql)) {
+        $message = "Shop details updated";
+    } else {
+        $message = "Failed to update shop details";
+    }
+
+    // Handle image upload
     $image = $_FILES["image"];
     $imageName = $image["name"];
     $imageTmpName = $image["tmp_name"];
 
-    // Get the file extension
-    $imageExtension = pathinfo($imageName, PATHINFO_EXTENSION);
+    // Check if a file was uploaded
+    if (!empty($imageName)) {
+        // Get the file extension
+        $imageExtension = pathinfo($imageName, PATHINFO_EXTENSION);
 
-    // Generate a unique filename (you can use your own logic)
-    $uniqueFilename = uniqid() . "." . $imageExtension;
+        // Generate a unique filename
+        $uniqueFilename = uniqid() . "." . $imageExtension;
 
-    // Define the target directory for storing images
-    $targetDirectory = "uploads/";
+        // Define the target directory for storing images
+        $targetDirectory = "uploads/";
 
-    // Create the full path to the target file
-    $targetPath = $targetDirectory . $uniqueFilename;
+        // Create the full path to the target file
+        $targetPath = $targetDirectory . $uniqueFilename;
 
-    // Check if the file is an allowed image type
-    $allowedExtensions = ["png", "jpg", "jpeg"];
-    if (in_array($imageExtension, $allowedExtensions)) {
-        // Move the uploaded file to the target directory
-        if (move_uploaded_file($imageTmpName, $targetPath)) {
-            // Insert the file path into the database (you can adapt this for your database structure)
-            $sql = "UPDATE regShopOwner SET file_path = '$targetPath' WHERE mobile = $mobile";
-            if ($conn->query($sql) === TRUE) {
-                $message = "Image uploaded successfully.";
+        // Check if the file is an allowed image type
+        $allowedExtensions = ["png", "jpg", "jpeg"];
+        if (in_array($imageExtension, $allowedExtensions)) {
+            // Move the uploaded file to the target directory
+            if (move_uploaded_file($imageTmpName, $targetPath)) {
+                // Update the file_path in the database
+                $sql = "UPDATE regShopOwner SET file_path = '$targetPath' WHERE mobile = '$mobile'";
+
+                if (mysqli_query($conn, $sql)) {
+                    $message = "Image uploaded and shop details updated successfully.";
+                } else {
+                    $message = "Image uploaded, but failed to update shop details.";
+                }
             } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
+                $message = "Error uploading the image.";
             }
         } else {
-            $message = "Error uploading the image.";
+            $message = "Only PNG, JPG, and JPEG images are allowed.";
         }
-    } else {
-        $message = "Only PNG, JPG, and JPEG images are allowed.";
     }
 }
+
 
 //get uploaded image to show on the website
 $sql = "SELECT * FROM regShopOwner WHERE mobile=$mobile";
@@ -56,6 +88,7 @@ if (mysqli_num_rows($result) > 0) {
     // Get the file_path from the fetched row
     $file_path = $row['file_path'];
     $name = $row['name'];
+    $shopName = $row['shopName'];
 } else {
     echo "No records found for mobile: $mobile";
 }
@@ -187,6 +220,10 @@ if(isset($_GET['delete'])){
         .updateProfile{
             text-align: end;
         }
+
+        .shopName{
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -238,8 +275,12 @@ if(isset($_GET['delete'])){
         <?php echo $message; ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-
     <?php endif; ?>
+
+    <!-- Display the shop name -->
+    <?php if(!empty($shopName)) {?>
+    <h1 class="shopName"><?php echo $shopName; ?></h1>
+    <?php } ?>
 
     <!--Manage accounts Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -279,7 +320,7 @@ if(isset($_GET['delete'])){
     </div>
 
 
-    <!--Add Modal -->
+    <!--Add Service Modal -->
     <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -387,7 +428,7 @@ if(isset($_GET['delete'])){
                             echo "<tr>
                             <th scope='row'>". $slno . "</th>
                             <td>". $row['serviceName'] . "</td>
-                            <td>". $row['amount'] . "</td>
+                            <td>". $row['amount'] . "/-</td>
                             <td> <button class='edit btn btn-sm btn-primary' id=".$row['slno']." data-bs-toggle='modal'
                             data-bs-target='#editModal'>Edit</button> <button class='delete btn btn-sm btn-danger' id=".$row['slno'].">Delete</button>  </td>
                         </tr>";
