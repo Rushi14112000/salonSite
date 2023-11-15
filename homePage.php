@@ -136,6 +136,7 @@ if(isset($_GET['delete'])){
         $message = "Service Couldn't Delete Successfully";
     }
   }
+
 ?>
 
 <!doctype html>
@@ -261,7 +262,7 @@ if(isset($_GET['delete'])){
                         <img src="<?php echo $file_path; ?>" alt="user Photo" class="rounded-photo">
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#">LogOut</a>
+                        <a class="nav-link text-white" href="logout.php">LogOut</a>
                     </li>
 
                 </ul>
