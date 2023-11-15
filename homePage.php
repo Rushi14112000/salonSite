@@ -454,40 +454,48 @@ if(isset($_GET['delete'])){
         });
     </script>
     <script>
+
         document.addEventListener("DOMContentLoaded", function () {
-        setTimeout(function () {
-            document.getElementById("autoDismissAlert").classList.add("d-none"); // Hide the alert
-        }, 5000);
-    });
+        var autoDismissAlert = document.getElementById("autoDismissAlert");
 
-    edits = document.getElementsByClassName('edit');
-    Array.from(edits).forEach((element) => {
-      element.addEventListener("click", (e) => {
-        tr = e.target.parentNode.parentNode;
-        serviceName = tr.getElementsByTagName("td")[0].innerText;
-        amount = tr.getElementsByTagName("td")[1].innerText;
-        console.log(serviceName, amount);
-        serviceNameEdit.value = serviceName;
-        amountEdit.value = amount;
-        slnoEdit.value = e.target.id;
-        console.log(e.target.id)
-      })
-    })
+            if (autoDismissAlert) {
+                setTimeout(function () {
+                    autoDismissAlert.classList.add("d-none"); // Hide the alert
+                }, 5000);
+            }
+        });
 
-    deletes = document.getElementsByClassName('delete');
-    Array.from(deletes).forEach((element) => {
-      element.addEventListener("click", (e) => {
-        slno = e.target.id;
 
-        if (confirm("Are you sure you want to delete this Service!")) {
-          console.log("yes");
-          window.location = `homePage.php?delete=${slno}`;
-        }
-        else {
-          console.log("no");
-        }
-      })
-    })
+        document.addEventListener("DOMContentLoaded", function () {
+            edits = document.getElementsByClassName('edit');
+            Array.from(edits).forEach((element) => {
+                element.addEventListener("click", (e) => {
+                    tr = e.target.parentNode.parentNode;
+                    serviceName = tr.getElementsByTagName("td")[0].innerText;
+                    amount = tr.getElementsByTagName("td")[1].innerText;
+                    console.log(serviceName, amount);
+                    serviceNameEdit.value = serviceName;
+                    amountEdit.value = amount;
+                    slnoEdit.value = e.target.id;
+                    console.log(e.target.id)
+                })
+            })
+
+            deletes = document.getElementsByClassName('delete');
+            Array.from(deletes).forEach((element) => {
+                element.addEventListener("click", (e) => {
+                    slno = e.target.id;
+
+                    if (confirm("Are you sure you want to delete this Service!")) {
+                        console.log("yes");
+                        window.location = `homePage.php?delete=${slno}`;
+                    }
+                    else {
+                        console.log("no");
+                    }
+                })
+            })
+        })
     </script>
 </body>
 
